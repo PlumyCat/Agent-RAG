@@ -1,0 +1,75 @@
+{
+    "permissions": {
+        "defaultMode": "acceptEdits",
+        "allow": [
+            "python *",
+            "pip *",
+            "pytest *",
+            "black *",
+            "isort *",
+            "mypy *",
+            "npx -y @modelcontextprotocol/inspector *",
+            "claude mcp *",
+            "git *",
+            "ls *",
+            "cat *",
+            "grep *",
+            "find *"
+        ],
+        "ask": [
+            "Bash(rm *)",
+            "Bash(sudo *)",
+            "pip install *",
+            "pip uninstall *"
+        ],
+        "deny": [
+            "Read(./.env)",
+            "Read(./.env.*)",
+            "Read(./secrets/**)",
+            "Read(./**/*.key)",
+            "Read(./**/*.pem)",
+            "Bash(curl *)",
+            "WebFetch(*password*)",
+            "WebFetch(*token*)"
+        ],
+        "additionalDirectories": [
+            "../examples/",
+            "../docs/"
+        ]
+    },
+    "env": {
+        "PYTHONPATH": "src:tests",
+        "MCP_TIMEOUT": "10000",
+        "PYTEST_ADDOPTS": "-v --tb=short"
+    },
+    "hooks": {
+        "preToolUse": [
+            {
+                "matcher": "Write|Edit|MultiEdit",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "python3 -c \"import json, sys; data=json.load(sys.stdin); path=data.get('toolInput',{}).get('filePath',''); sys.exit(2 if any(p in path for p in ['.env', '.key', '.pem', 'secrets/']) else 0)\""
+                    }
+                ]
+            }
+        ],
+        "postToolUse": [
+            {
+                "matcher": "Write|Edit|MultiEdit",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "python3 -c \"import json, sys, os; data=json.load(sys.stdin); path=data.get('toolInput',{}).get('filePath',''); exec('import subprocess; subprocess.run([\\\"black\\\", path], capture_output=True)' if path.endswith('.py') else 'pass')\""
+                    }
+                ]
+            }
+        ],
+        "notification": [
+            {
+                "event": "permission_needed",
+                "run": "echo '\\a'"
+            }
+        ]
+    }
+}

@@ -1,0 +1,7 @@
+Ceci est un document de test pour le système MCP-RAG.
+
+Il contient plusieurs paragraphes pour tester l'extraction de contenu et la génération d'embeddings.
+
+Le système utilise maintenant PostgreSQL avec des embeddings stockés en format JSONB au lieu de pgvector.
+
+Cette approche permet de fonctionner sans l'extension pgvector qui n'est pas disponible dans le conteneur PostgreSQL actuel.

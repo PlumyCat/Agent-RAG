@@ -1,0 +1,4 @@
+Ceci est un document de test pour MCP-RAG.
+Il contient du texte simple pour tester les fonctionnalités d'upload et de recherche sémantique.
+Le système MCP-RAG devrait pouvoir traiter ce fichier et créer des embeddings.
+Test de fonctionnalité RAG avec PostgreSQL et pgvector.

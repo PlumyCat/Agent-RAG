@@ -1,0 +1,89 @@
+services:
+  # PostgreSQL avec pgvector pour Better Chatbot + MCP RAG
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: better-chatbot-pg-vector
+    environment:
+      POSTGRES_DB: better_chatbot
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+      # Configuration pour performance avec embeddings
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_better_chatbot_data:/var/lib/postgresql/data
+      - ./database/init_better_chatbot_complete.sql:/docker-entrypoint-initdb.d/01-init.sql
+    command: |
+      postgres
+      -c shared_preload_libraries=vector
+      -c max_connections=200
+      -c shared_buffers=256MB
+      -c effective_cache_size=1GB
+      -c maintenance_work_mem=64MB
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
+      -c random_page_cost=1.1
+      -c effective_io_concurrency=200
+      -c work_mem=4MB
+      # Configuration spécifique pgvector
+      -c log_statement=none
+      -c log_duration=off
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d better_chatbot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - better-chatbot-network
+
+  # Redis pour cache et sessions
+  redis:
+    image: redis:7-alpine
+    container_name: better-chatbot-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_better_chatbot_data:/data
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - better-chatbot-network
+
+  # PgAdmin pour administration (optionnel)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: better-chatbot-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@better-chatbot.local
+      PGADMIN_DEFAULT_PASSWORD: admin_password
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_better_chatbot_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - better-chatbot-network
+
+volumes:
+  postgres_better_chatbot_data:
+    driver: local
+  redis_better_chatbot_data:
+    driver: local
+  pgadmin_better_chatbot_data:
+    driver: local
+
+networks:
+  better-chatbot-network:
+    driver: bridge

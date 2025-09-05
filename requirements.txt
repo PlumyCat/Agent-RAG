@@ -1,0 +1,85 @@
+# Core MCP and LangChain
+mcp>=1.0.0
+langchain-mcp-adapters>=0.1.0
+langgraph>=0.2.0
+langchain-openai>=0.2.0
+langchain>=0.3.0
+
+# Azure OpenAI Integration
+openai>=1.12.0
+azure-identity>=1.15.0
+azure-core>=1.29.0
+
+# PostgreSQL and Vector Database
+psycopg2-binary>=2.9.9
+psycopg[binary,pool]>=3.1.0
+pgvector>=0.2.4
+asyncpg>=0.29.0
+sqlalchemy>=2.0.0
+sqlalchemy[asyncio]>=2.0.0
+alembic>=1.13.0
+
+# Document Processing - Enhanced
+pdfplumber>=0.7.0
+pymupdf>=1.23.0
+pdf2image==1.17.0 
+pytesseract==0.3.13
+PyPDF2>=3.0.0
+python-docx>=1.1.0
+openpyxl>=3.1.0
+pandas>=2.0.0
+aiofiles>=23.0.0
+XlsxWriter==3.2.3 
+python-pptx==1.0.2
+opencv-python==4.11.0.86
+opencv-contrib-python==4.11.0.86
+
+# NLP and Entity Extraction
+spacy>=3.7.0
+spacy-transformers>=1.3.0
+transformers>=4.36.0
+torch>=2.1.0
+sentence-transformers>=2.2.0
+
+# Knowledge Graph and Relations
+networkx>=3.2.0
+rdflib>=7.0.0
+pyvis>=0.3.2
+
+# Caching and Performance
+redis>=5.0.0
+joblib>=1.3.0
+xxhash>=3.4.0
+
+# Streamlit UI
+streamlit>=1.28.0
+streamlit-extras>=0.3.0
+streamlit-agraph>=0.0.45
+plotly>=5.17.0
+
+# Development and Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-postgresql>=5.0.0
+black>=23.0.0
+isort>=5.12.0
+mypy>=1.7.0
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.5.0
+httpx>=0.25.0
+aioredis>=2.0.0
+numpy>=1.24.0
+scipy>=1.11.0
+scikit-learn>=1.3.0
+
+# Logging and Monitoring
+structlog>=23.2.0
+prometheus-client>=0.19.0
+psutil>=5.9.0
+
+# Optional: Local embedding models
+# Uncomment if you want local alternatives
+# onnxruntime>=1.16.0
+# optimum>=1.15.0

@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "openai-cookbook": {
+      "command": "node",
+      "args": [
+        "/home/ric/Projects/mcp-openai-cookbook-server/dist/index.js"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+      }
+    }
+  }
+}
